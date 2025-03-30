@@ -23,17 +23,17 @@ Make sure you have the following installed:
 
 - A scheduled **JobRunner** triggers the job periodically
 - It fetches all `deliveryDriverId##province` pairs via REST (mocked)
-- Each pair is processed by a `Slave Step` in parallel
-- Each `Slave Step`:
+- The job starts a `Master Step`, which starts the `Slave Step`, one for each partition `deliveryDriverId##province`
+- Each `Slave Step` is processed in parallel and:
     - reads from DynamoDB the PaperDelivery with the deliveryDriverId##province partition key
     - processes in chunks
     - writes/logs/removes the data
 
-At startup, the `main` application class clears and repopulates DynamoDB tables using `DynamoDbTemplate` and a mock data generator.
-
 ![Block Image](/spring-batch-01.webp)
 
 ![Block Image](/spring-batch-02.webp)
+
+At startup, the `main` application class clears and repopulates DynamoDB tables using `DynamoDbTemplate` and a mock data generator.
 
 ---
 
