@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
 import java.time.Instant;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -23,7 +22,6 @@ import java.util.stream.StreamSupport;
 @Slf4j
 public class SpringBatchAwsApplication {
 
-	private final Random random = new Random();
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBatchAwsApplication.class, args);
@@ -41,25 +39,42 @@ public class SpringBatchAwsApplication {
 			log.info("Initialization {} requestId for every {} pair deliveryDriverId##Province", numberOfRequest, pks.length);
 			Stream.of(pks).parallel().forEach(pk -> {
 				String[] deliveryDriverProvince = pk.split("##");
-				DeliveryDriverCapacity deliveryDriverCapacity = new DeliveryDriverCapacity();
-				deliveryDriverCapacity.setPk(pk);
-				deliveryDriverCapacity.setDeliveryDriverId(deliveryDriverProvince[0]);
-				deliveryDriverCapacity.setProvince(deliveryDriverProvince[1]);
-				deliveryDriverCapacity.setCapacity(random.nextLong(2) + 1);
-				deliveryDriverCapacity.setUsedCapacity(0L);
+				var deliveryDriverId = deliveryDriverProvince[0];
+				var province = deliveryDriverProvince[1];
+				DeliveryDriverCapacity deliveryDriverCapacity = buildDeliveryDriverCapacity(pk, deliveryDriverId, province);
 				dynamoDbTemplate.save(deliveryDriverCapacity);
 				for(int i = 0; i < numberOfRequest; i++) {
-					PaperDelivery paperDelivery = new PaperDelivery();
-					paperDelivery.setPk(pk);
-					paperDelivery.setCreatedAt(Instant.now());
-					paperDelivery.setRequestId(UUID.randomUUID().toString());
-					paperDelivery.setDeliveryDriverId(deliveryDriverProvince[0]);
-					paperDelivery.setProvince(deliveryDriverProvince[1]);
+					PaperDelivery paperDelivery = buildPaperDelivery(pk, deliveryDriverId, province);
 					dynamoDbTemplate.save(paperDelivery);
 				}
 			});
 
 		};
+	}
+
+	private static PaperDelivery buildPaperDelivery(String pk, String deliveryDriverId, String province) {
+		PaperDelivery paperDelivery = new PaperDelivery();
+		paperDelivery.setPk(pk);
+		paperDelivery.setCreatedAt(Instant.now());
+		paperDelivery.setRequestId(UUID.randomUUID().toString());
+		paperDelivery.setDeliveryDriverId(deliveryDriverId);
+		paperDelivery.setProvince(province);
+		return paperDelivery;
+	}
+
+	private static DeliveryDriverCapacity buildDeliveryDriverCapacity(String pk, String deliveryDriverId, String province) {
+		DeliveryDriverCapacity deliveryDriverCapacity = new DeliveryDriverCapacity();
+		deliveryDriverCapacity.setPk(pk);
+		deliveryDriverCapacity.setDeliveryDriverId(deliveryDriverId);
+		deliveryDriverCapacity.setProvince(province);
+		if(pk.equals("1##RM") || pk.equals("2##NA")) {
+			deliveryDriverCapacity.setCapacity(1L);
+		}
+		else {
+			deliveryDriverCapacity.setCapacity(2L);
+		}
+		deliveryDriverCapacity.setUsedCapacity(0L);
+		return deliveryDriverCapacity;
 	}
 
 	private <T> void cleanDb(DynamoDbTemplate dynamoDbTemplate, Class<T> clazz) {

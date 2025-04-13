@@ -27,10 +27,10 @@ public class LogWriter implements ItemWriter<PaperDelivery> {
                     deliveryDriverCapacity.getUsedCapacity() < deliveryDriverCapacity.getCapacity()) {
 
                 deliveryDriverCapacity.setUsedCapacity(deliveryDriverCapacity.getUsedCapacity() + 1);
-                log.info("Writing paper {}",paper);
+                log.info("Paper Delivery DONE: {}",paper);
                 dynamoDbTemplate.delete(paper);
             } else {
-                log.warn("PaperDelivery discarded because there is no delivery driver capacity: {}, {}", paper.getRequestId(), paper.getPk());
+                log.warn("PaperDelivery DISCARDED because there is no delivery driver capacity: {}, {}", paper.getRequestId(), paper.getPk());
             }
         });
 

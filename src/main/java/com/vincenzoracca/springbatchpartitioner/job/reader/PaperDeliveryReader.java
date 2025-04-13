@@ -3,6 +3,7 @@ package com.vincenzoracca.springbatchpartitioner.job.reader;
 import com.vincenzoracca.springbatchpartitioner.middleware.db.entity.PaperDelivery;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.*;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
+@Slf4j
 public class PaperDeliveryReader implements ItemReader<PaperDelivery>, StepExecutionListener {
 
     private final DynamoDbTemplate dynamoDbTemplate;
@@ -26,6 +28,7 @@ public class PaperDeliveryReader implements ItemReader<PaperDelivery>, StepExecu
         ExecutionContext context = stepExecution.getExecutionContext();
         var pk = context.getString("pk");
         this.iterator = loadData(pk).iterator();
+        log.info("Reading paper deliveries with pk {}", pk);
     }
 
     private List<PaperDelivery> loadData(String pk) {

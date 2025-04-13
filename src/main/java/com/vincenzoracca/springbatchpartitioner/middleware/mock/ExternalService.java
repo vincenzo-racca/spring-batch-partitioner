@@ -13,7 +13,7 @@ public class ExternalService {
                 "BA",
                 "MI",
                 "NA",
-                "RO"
+                "RM"
         );
     }
 
