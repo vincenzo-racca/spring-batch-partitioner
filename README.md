@@ -8,6 +8,7 @@ This project runs a batch job using **Spring Batch** with support for **parallel
 - **Micrometer Tracing + Spring Boot Actuator** for observability and traceability
 - **DynamoDB pre-populated on startup** with `PaperDelivery` and `DeliveryDriverCapacity` sample data
 
+Read the full article on my blog: [Partitioned Steps with Spring Batch](https://www.vincenzoracca.com/en/blog/framework/spring/spring-batch-partitioner/)!
 ---
 
 ## ✅ Prerequisites
@@ -60,13 +61,13 @@ The project includes a `compose.yml` with:
 Make sure you have [Podman](https://podman.io) or Docker installed. Then run:
 
 ```bash
-podman compose -f compose.yml up
+podman compose up -d
 ```
 
 Or with Docker:
 
 ```bash
-docker compose -f compose.yml up
+docker compose up -d
 ```
 
 Run the Spring Boot app:
@@ -103,8 +104,7 @@ paper-delivery-cron: "0 */1 * * * *" # every minute
 ## 📁 Project Structure
 
 ```
-.
-├── HELP.md
+├── LICENSE
 ├── README.md
 ├── compose.yml
 ├── config
@@ -113,7 +113,6 @@ paper-delivery-cron: "0 */1 * * * *" # every minute
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
-├── prova.md
 ├── spring-batch-01.webp
 ├── spring-batch-02.webp
 ├── src
@@ -126,10 +125,10 @@ paper-delivery-cron: "0 */1 * * * *" # every minute
 │   │   │               ├── job
 │   │   │               │   ├── config
 │   │   │               │   │   └── PaperDeliveryJobConfig.java
+│   │   │               │   ├── partitioner
+│   │   │               │   │   └── PaperDeliveryPartitioner.java
 │   │   │               │   ├── reader
-│   │   │               │   │   ├── PaperDeliveryReader.java
-│   │   │               │   │   └── partitioner
-│   │   │               │   │       └── PaperDeliveryPartitioner.java
+│   │   │               │   │   └── PaperDeliveryReader.java
 │   │   │               │   ├── runner
 │   │   │               │   │   └── PaperDeliveryJobRunner.java
 │   │   │               │   └── writer

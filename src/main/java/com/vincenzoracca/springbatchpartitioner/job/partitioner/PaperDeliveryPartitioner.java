@@ -1,4 +1,4 @@
-package com.vincenzoracca.springbatchpartitioner.job.reader.partitioner;
+package com.vincenzoracca.springbatchpartitioner.job.partitioner;
 
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.item.ExecutionContext;
@@ -17,7 +17,7 @@ public class PaperDeliveryPartitioner implements Partitioner {
 
     @Override
     public Map<String, ExecutionContext> partition(int gridSize) {
-        Map<String, ExecutionContext> partitions = new HashMap<>();
+        Map<String, ExecutionContext> partitions = HashMap.newHashMap(pks.size());
 
         for (int i = 0; i < pks.size(); i++) {
             ExecutionContext context = new ExecutionContext();

@@ -1,7 +1,7 @@
 package com.vincenzoracca.springbatchpartitioner.job.config;
 
 import com.vincenzoracca.springbatchpartitioner.job.reader.PaperDeliveryReader;
-import com.vincenzoracca.springbatchpartitioner.job.reader.partitioner.PaperDeliveryPartitioner;
+import com.vincenzoracca.springbatchpartitioner.job.partitioner.PaperDeliveryPartitioner;
 import com.vincenzoracca.springbatchpartitioner.job.writer.LogWriter;
 import com.vincenzoracca.springbatchpartitioner.middleware.db.entity.PaperDelivery;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
@@ -38,6 +38,7 @@ public class PaperDeliveryJobConfig {
     private final JobRepository jobRepository;
 
 
+    // Used to run Slave Steps in parallel
     private TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
