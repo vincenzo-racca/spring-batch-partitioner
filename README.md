@@ -7,8 +7,7 @@ This project runs a batch job using **Spring Batch** with support for **parallel
 - **Spring Scheduler** for periodic execution
 - **Micrometer Tracing + Spring Boot Actuator** for observability and traceability
 - **DynamoDB pre-populated on startup** with `PaperDelivery` and `DeliveryDriverCapacity` sample data
-
-Read the full article on my blog: [Partitioned Steps with Spring Batch](https://www.vincenzoracca.com/en/blog/framework/spring/spring-batch-partitioner/)!
+**Read the full article on my blog:** [Partitioned Steps with Spring Batch](https://www.vincenzoracca.com/en/blog/framework/spring/spring-batch-partitioner/)!
 ---
 
 ## ✅ Prerequisites
